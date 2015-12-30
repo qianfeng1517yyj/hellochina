@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A351C128-6B6C-4C03-ADD0-763B5251030D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>project</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>b9996b2b-5f0b-4f1b-b691-f94c319abba7</key>
+		<string>svn://10.8.154.242/mycode</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>code/LC.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>b9996b2b-5f0b-4f1b-b691-f94c319abba7</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>b9996b2b-5f0b-4f1b-b691-f94c319abba7</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>b9996b2b-5f0b-4f1b-b691-f94c319abba7</string>
+			<key>IDESourceControlWCCName</key>
+			<string>05_mycode%202</string>
+		</dict>
+	</array>
+</dict>
+</plist>

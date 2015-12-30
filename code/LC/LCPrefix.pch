@@ -1,0 +1,49 @@
+//
+//  LCPrefix.pch
+//  LC
+//
+//  Created by QianFeng on 15/10/4.
+//  Copyright (c) 2015年 第一小组二分队. All rights reserved.
+//
+
+#ifndef LC_LCPrefix_pch
+#define LC_LCPrefix_pch
+
+// 宏定义
+#define LCKScreenSize     [UIScreen mainScreen].bounds.size
+#define LCKScreenWidth     LCKScreenSize.width
+#define LCKScreenHeight    LCKScreenSize.height
+#define LCTabBarHeight     49
+#define LCBaseColor [UIColor colorWithRed:25/255.0 green:25/255.0 blue:27/255.0 alpha:1.0]
+#define LCBaseMagazineColor [UIColor colorWithRed:203/255.0 green:207/255.0 blue:215/255.0 alpha:1];
+
+// 适配比例
+#define LCSalce (1/375)* LCKScreenWidth
+
+//数据解析类
+#import "PaseData.h"
+#import "WQQDBManager.h"
+
+// 分类
+#import "UIImage+image.h"
+#import "UIView+Extension.h"
+#import "UIButton+HandEvent.h"
+#import "UIBarButtonItem+Extension.h"
+
+// 连接宏定义
+#import "LCDefine.h"
+
+// 工厂类
+#import "CustomViewFactory.h"
+#import "WQQHelper.h"
+
+#import "UIImageView+WebCache.h"
+#import "NetDataEngine.h"
+
+#import "JHRefresh.h"
+
+// 分享Key
+#define LCAPPKEY @"55f7cd6ae0f55a31920070c3"
+
+
+#endif

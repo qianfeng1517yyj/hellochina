@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="GYDStoreHeadView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="494"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView tag="501" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="T21-Vu-NgS">
+                    <rect key="frame" x="187" y="0.0" width="188" height="135"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <imageView tag="502" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="DKP-y2-FdT">
+                    <rect key="frame" x="0.0" y="135" width="187" height="135"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <imageView tag="503" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="AXa-9q-1F3">
+                    <rect key="frame" x="187" y="135" width="188" height="135"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <imageView tag="504" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="WyO-Gt-eGo">
+                    <rect key="frame" x="0.0" y="270" width="375" height="224"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
+                </imageView>
+                <imageView tag="500" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ehO-hr-OW7">
+                    <rect key="frame" x="0.0" y="0.0" width="187" height="135"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="imageViewFive" destination="WyO-Gt-eGo" id="wcw-Dy-YZ2"/>
+                <outlet property="imageViewFour" destination="AXa-9q-1F3" id="Jxe-ud-0CF"/>
+                <outlet property="imageViewOne" destination="ehO-hr-OW7" id="eni-tQ-aJL"/>
+                <outlet property="imageViewThird" destination="DKP-y2-FdT" id="DG4-IJ-kFg"/>
+                <outlet property="imageViewTwo" destination="T21-Vu-NgS" id="EhW-od-z2g"/>
+            </connections>
+            <point key="canvasLocation" x="278.5" y="328"/>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

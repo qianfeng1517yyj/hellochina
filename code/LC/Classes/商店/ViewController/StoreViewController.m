@@ -1,0 +1,237 @@
+//
+//  StoreViewController.m
+//  LC
+//
+//  Created by QianFeng on 15/10/4.
+//  Copyright (c) 2015年 第一小组二分队. All rights reserved.
+//
+
+#import "StoreViewController.h"
+#import "StoreSectionView.h"
+#import "StoreTableViewCell.h"
+#import "GYDStoreDetailViewController.h"
+#import "GYDSearchViewController.h"
+#import "GYDStoreHeadView.h"
+#import "StoreHeadModel.h"
+#import "GYDWebViewController.h"
+#import "GYDShopTableViewController.h"
+
+#define kBaseTag   100
+
+@interface StoreViewController ()<UITableViewDataSource, UITableViewDelegate, GYDStoreHeadViewDlegate>
+{
+    BOOL flag[5]; //使用flag数组来记录每个区的状态，
+    //NO 关闭  YES 展开
+}
+@property (nonatomic) UITableView *tableView;
+@property (nonatomic) NSArray *sectionDataSoure;
+@property (nonatomic) NSMutableDictionary *cellDataSoure;
+@property (nonatomic) NSArray *headDataSoure;
+
+@property (nonatomic, assign) NSInteger lastSelectedIndex;
+
+@end
+
+@implementation StoreViewController
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    UIView *view = [self.tabBarController.view viewWithTag:10000];
+    view.hidden = NO;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self customUI];
+    [self loadData];
+}
+- (void)customUI {
+    self.view.backgroundColor = [UIColor blackColor];
+    [self setUpNavigationBar];
+    [self setUpTableview];
+}
+- (void)setUpNavigationBar {
+    self.title = @"商店";
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
+    UIBarButtonItem *leftBar = [UIBarButtonItem itemWithImageName:@"btn_nav_search" highImageName:nil target:self action:@selector(searchBarClick)];
+    self.navigationItem.leftBarButtonItem = leftBar;
+}
+- (void)searchBarClick {
+    GYDSearchViewController *searchVC = [[GYDSearchViewController alloc] init];
+    [self.navigationController pushViewController:searchVC animated:YES];
+}
+- (void)setUpTableview {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, LCKScreenWidth, self.view.height - 64-49) style:UITableViewStylePlain];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor blackColor];
+    self.tableView.bounces = NO;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self registCell];
+    [self.view addSubview:self.tableView];
+}
+- (void)registCell {
+    [self.tableView registerNib:[UINib nibWithNibName:@"StoreSectionView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"StoreSectionViewId"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"StoreTableViewCell" bundle:nil] forCellReuseIdentifier:@"StoreTableViewCellId"];
+}
+- (void)loadData {
+    if ([self loadDataFromLocal]) {
+        [self loadDataFromNet];
+    }
+}
+- (BOOL)loadDataFromLocal {
+    return YES;
+}
+- (void)loadDataFromNet {
+    [[NetDataEngine sharedInstance] requsetStoreFrom:LCStoreUrl success:^(id responsData) {
+        self.sectionDataSoure = [PaseData paseStoreData:responsData];
+        [self setUpCellDataSoure];
+        [self.tableView reloadData];
+    } failed:^(NSError *error) {
+    }];
+    [[NetDataEngine sharedInstance] requsetStoreFrom:LCStoreHeadUrl success:^(id responsData) {
+        self.headDataSoure = [PaseData paseStoreHeadData:responsData];
+        GYDStoreHeadView *headView = [[GYDStoreHeadView alloc] init];
+        headView.delegate = self;
+        [headView updateWithArray:self.headDataSoure];
+        self.tableView.tableHeaderView = headView;
+    } failed:^(NSError *error) {
+        
+    }];
+}
+- (void)setUpCellDataSoure {
+    self.cellDataSoure = [NSMutableDictionary dictionary];
+    for (int index = 0; index < self.sectionDataSoure.count; index++) {
+        StoreItemModel *model = self.sectionDataSoure[index];
+        [self.cellDataSoure setObject:model.children forKey:@(index)];
+    }
+}
+- (void)setUpSectionFlag:(NSInteger)section {
+    for (int index = 0; index < 5; index++) {
+        if (section != index) {
+            flag[index] = NO;
+        }
+    }
+}
+- (void)scrollToLastRowInSection:(NSInteger)section {
+    NSInteger number = [self.tableView numberOfRowsInSection:section];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:number-1 inSection:section]atScrollPosition:UITableViewScrollPositionNone animated:YES];
+}
+
+
+#pragma  mark- 
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.sectionDataSoure.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (flag[section] == NO) {
+        return 0;
+    } else {
+        NSArray *arr = [self.cellDataSoure objectForKey:@(section)];
+        return arr.count;
+    }
+}
+//指定SectionHeadView
+- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    StoreSectionView *headView = [[StoreSectionView alloc] initWithFrame:CGRectMake(0, 0, LCKScreenWidth, 200)];
+    headView.tableView = self.tableView;
+    headView.section = section;
+    [headView updateWithModel:self.sectionDataSoure[section]];
+    //添加tag值目的是区分点击的是哪一个HeadView
+    headView.tag = section+kBaseTag;
+    headView.block = ^(NSInteger tag){
+         //写当headView被点击后的处理
+        NSInteger section = tag - kBaseTag;
+        [self setUpSectionFlag:section];
+        flag[section] = !flag[section];
+        [self.tableView reloadData];
+        [self scrollToLastRowInSection:section];
+    };
+    return headView;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    StoreTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StoreTableViewCellId" forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSArray *arr = [self.cellDataSoure objectForKey:@(indexPath.section)];
+    StoreItemModel *model = arr[indexPath.row];
+    [cell updateWithModel:model];
+    return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSArray *arr = [self.cellDataSoure objectForKey:@(indexPath.section)];
+    StoreItemModel *model = arr[indexPath.row];
+    GYDStoreDetailViewController *detailVC = [[GYDStoreDetailViewController alloc] init];
+    detailVC.childrenModel = model;
+    detailVC.superModel = self.sectionDataSoure[indexPath.section];
+    detailVC.cat_code = model.code;
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+
+//指定section 的headerView的高度
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 200;
+}
+
+#pragma mark - GYDStoreHeadViewDlegate
+
+- (void)headViewDidSelected:(StoreHeadModel *)model tag:(NSInteger)tag {
+    if (tag == 502) {
+        GYDShopTableViewController *shopVC = [[GYDShopTableViewController alloc] init];
+        [self.navigationController pushViewController:shopVC animated:YES];
+        return;
+    }
+    if (tag == 504) {
+        GYDWebViewController *webVC = [[GYDWebViewController alloc] init];
+        webVC.webUrl = [model.dataContext objectForKey:@"topic_url"];
+        webVC.subTitle = [model.dataContext objectForKey:@"title"];
+        [self.navigationController pushViewController:webVC animated:YES];
+        return;
+    }
+    GYDStoreDetailViewController *detailVC = [[GYDStoreDetailViewController alloc] init];
+    detailVC.cat_code = [NSString stringWithFormat:@"%ld", model.coverId];
+    detailVC.isnormal = YES;
+    if (tag == 500) {
+        detailVC.title = @"新品";
+    }else if (tag == 501) {
+        detailVC.title = @"折扣";
+    }else {
+        detailVC.title = @"热卖";
+    }
+    detailVC.url = LCStoreHeadDetailUrl;
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+//    [UIView animateWithDuration:0.5 animations:^{
+//      
+//
+//        UIView *view = [self.tabBarController.view viewWithTag:10000];
+//        view.alpha = 0.01;
+//       
+//    }];
+//    
+//}
+//
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//
+//    [UIView animateWithDuration:0.5 animations:^{
+//        
+//        UIView *view = [self.tabBarController.view viewWithTag:10000];
+//        view.alpha = 1.0;
+//        
+//    }];
+//    
+//}
+
+
+
+
+
+
+
+@end
